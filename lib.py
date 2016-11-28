@@ -30,10 +30,6 @@ class ProxyPool:
 	def addProxy(self, IP, PORT, PROTOCOL):
 		self.cursor.execute("INSERT OR IGNORE INTO " + self.TB_ProxyPool+"(ip, port, protocol) VALUES (?,?,?)", [IP,PORT,PROTOCOL])
 
-	#Delete Proxy Data with no protocol provided (Http / Https)
-	def cleanNullProtocol(self):
-		self.cursor.execute("DELETE FROM "+self.TB_ProxyPool+" WHERE protocol != ? and protocol != ?", ("HTTP","HTTPS"))
-
 	#Delete Proxy Data with no connection
 	def cleanNonWorking(self):
 		for info in self.cursor.execute("SELECT * FROM "+self.TB_ProxyPool).fetchall():
@@ -50,19 +46,11 @@ class ProxyPool:
 						print IP+" is down or not anonymous\n"
 						break
 					else:
-						#Internet is DOWN
 						print "-"*10+" INTERNET IS DOWN "+"-"*10+"\n"
 				else:
 					#Is Anonymous Connection
 					print " "*10+" --->>> ANONYMOUS <<<--- \n"
 					break
-
-	def testInternet(self):
-		try:
-			requests.get("http://baidu.com", timeout=REQ_TIMEOUT)
-			return True
-		except:
-			return False
 	
 	#Testing connection and anonymity, returns True if it can be used and is anonymous, otherwise returns False
 	def testConnection(self, IP, PORT, PROTOCOL):
@@ -82,3 +70,17 @@ class ProxyPool:
 		self.cursor.execute("DELETE FROM "+self.TB_ProxyPool+" WHERE ip=?",(IP,))
 
 
+#####################################################
+#				Situational Patches					#
+#####################################################
+	#Testing connectivity
+	def testInternet(self):
+		try:
+			requests.get("http://baidu.com", timeout=REQ_TIMEOUT)
+			return True
+		except:
+			return False
+
+	#Delete Proxy Data with no protocol provided (Http / Https)
+	def cleanNullProtocol(self):
+		self.cursor.execute("DELETE FROM "+self.TB_ProxyPool+" WHERE protocol != ? and protocol != ?", ("HTTP","HTTPS"))
