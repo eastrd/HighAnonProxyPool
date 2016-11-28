@@ -4,6 +4,6 @@
 
 
 # How It Works?
-- Loop through proxies
-- Check their connection availability and anonymity.
-- Delete the proxy record if found unavailable or non-anonymous.
+- Loops through proxies
+- Checks their connection availability and anonymity.
+- Deletes the proxy record if found unavailable or non-anonymous.
