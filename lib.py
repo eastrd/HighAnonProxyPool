@@ -1,14 +1,4 @@
 '''
-Get:
-Scrape new proxies from websites,
-extract IP address and compare with existing ones, abandon the duplicated ips,
-add these new proxies into the existing pool
-
-Maintaince:
-Check the connection for each existing proxies and delete the unavailable ones
-
-'''
-'''
 ProxyPool Database:
 	- Loop through proxies
 	- Check their connection availability and anonymity.
@@ -32,8 +22,7 @@ class ProxyPool:
 	#Initialise the ProxyPool
 	def __init__(self,ProxyPoolDB):
 		self.ProxyPoolDB = ProxyPoolDB
-		self.conn = sqlite3.connect(self.ProxyPoolDB, isolation_level=None)
-		self.cursor = self.conn.cursor()
+		self.cursor = sqlite3.connect(self.ProxyPoolDB, isolation_level=None).cursor()
 		self.TB_ProxyPool = "TB_ProxyPool"
 		self.cursor.execute("CREATE TABLE IF NOT EXISTS "+self.TB_ProxyPool+"(ip TEXT UNIQUE, port INTEGER, protocol TEXT)")
 
@@ -70,7 +59,7 @@ class ProxyPool:
 
 	def testInternet(self):
 		try:
-			requests.get("http://google.com", timeout=REQ_TIMEOUT)
+			requests.get("http://baidu.com", timeout=REQ_TIMEOUT)
 			return True
 		except:
 			return False
