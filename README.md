@@ -1,6 +1,7 @@
 # ProxyPool
 - A tool that adds/checks/cleans Proxy Records
 - Flexible Access to the Proxy Database, simply by using its interfaces
+- Currently ONLY supports HTTP and HTTPS
 
 
 # How It Works?
