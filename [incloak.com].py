@@ -17,7 +17,7 @@ for RAW_ProxyInfo in soup.find_all("tr"):
 		IP = str(RAW_ProxyInfo.find("td",{"class":"tdl"})).replace("<td class=\"tdl\">","").replace("</td>","")
 		PORT = str(RAW_ProxyInfo.find("td",None)).replace("<td>","").replace("</td>","")
 		PROTOCOL = RAW_ProxyInfo.find_all("td")[4].text
-		print PROTOCOL+" -> "+IP+":"+PORT+" "*3+"Length: "+str(len(PROTOCOL))
+		print PROTOCOL+" -> "+IP+":"+PORT
 
 
 

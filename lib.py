@@ -35,10 +35,10 @@ class ProxyPool:
 		for info in self.cursor.execute("SELECT * FROM "+self.TB_ProxyPool).fetchall():
 			IP, PORT, PROTOCOL = info[0], str(info[1]), info[2].lower()
 			attempt = 0
+			#Loop the connection until internet is up (if connection failed) or proxy works
 			while True:
 				print "Testing "+IP+":"+PORT
-				#Attempt to connect for 4 times
-				isAnonymous = self.testConnection(IP,PORT,PROTOCOL) or self.testConnection(IP,PORT,PROTOCOL) or self.testConnection(IP,PORT,PROTOCOL) or self.testConnection(IP,PORT,PROTOCOL)
+				isAnonymous = self.testConnection(IP,PORT,PROTOCOL)
 				if isAnonymous == False:
 					if self.testInternet() == True:
 						#Not an Anonymous Proxy
@@ -52,7 +52,7 @@ class ProxyPool:
 					print " "*10+" --->>> ANONYMOUS <<<--- \n"
 					break
 	
-	#Testing connection and anonymity, returns True if it can be used and is anonymous, otherwise returns False
+	#Testing given Proxy's connection and anonymity, returns True if it can be used and is anonymous, otherwise returns False
 	def testConnection(self, IP, PORT, PROTOCOL):
 		proxies = { PROTOCOL: IP+":"+PORT }
 		try:
@@ -69,10 +69,6 @@ class ProxyPool:
 	def delRecord(self, IP):
 		self.cursor.execute("DELETE FROM "+self.TB_ProxyPool+" WHERE ip=?",(IP,))
 
-
-#####################################################
-#				Situational Patches					#
-#####################################################
 	#Testing connectivity
 	def testInternet(self):
 		try:
@@ -80,7 +76,3 @@ class ProxyPool:
 			return True
 		except:
 			return False
-
-	#Delete Proxy Data with no protocol provided (Http / Https)
-	def cleanNullProtocol(self):
-		self.cursor.execute("DELETE FROM "+self.TB_ProxyPool+" WHERE protocol != ? and protocol != ?", ("HTTP","HTTPS"))

@@ -34,7 +34,8 @@ while True:
 					IP = re.findall(Re_Pattern_IP, ip_port)[0]
 					PORT = re.findall(Re_Pattern_PORT, ip_port)[0]
 					TYPE = Raw_ProxyInfo.find("li",{"class":"https"}).text
-					Pool.addProxy(IP,PORT,TYPE)
+					if TYPE != "-":
+						Pool.addProxy(IP,PORT,TYPE)
 				break
 			except Exception as e:
 				print "An error occurred: "+str(e)
