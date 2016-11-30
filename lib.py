@@ -1,18 +1,3 @@
-'''
-ProxyPool Database:
-	- Loop through proxies
-	- Check their connection availability and anonymity.
-	- Delete the proxy record if found unavailable or non-anonymous.
-'''
-
-'''
-Next Step:
-	- A daemon process to keep branched processes alive
-	- Multiprocessing for purifying the proxy data within the database
-	- More proxy scraping processes
-	- URGENT: Need to separate the "testing internet connection" module into its own
-'''
-
 import sqlite3
 import requests
 
@@ -20,17 +5,18 @@ REQ_TIMEOUT = 1.5
 
 class ProxyPool:
 	#Initialise the ProxyPool
-	def __init__(self,ProxyPoolDB):
+	def __init__(self,ProxyPoolDB="ProxyPoolDB"):
 		self.ProxyPoolDB = ProxyPoolDB
 		self.cursor = sqlite3.connect(self.ProxyPoolDB, isolation_level=None).cursor()
 		self.TB_ProxyPool = "TB_ProxyPool"
 		self.cursor.execute("CREATE TABLE IF NOT EXISTS "+self.TB_ProxyPool+"(ip TEXT UNIQUE, port INTEGER, protocol TEXT)")
+		#Only Uses UNIQUE IP, which in consequence rejects one IP with multiple protocol supports
 
 	#Add record if not exist
 	def addProxy(self, IP, PORT, PROTOCOL):
 		self.cursor.execute("INSERT OR IGNORE INTO " + self.TB_ProxyPool+"(ip, port, protocol) VALUES (?,?,?)", [IP,PORT,PROTOCOL])
 
-	#Delete Proxy Data with no connection
+	#*Delete Proxy Data with no connection
 	def cleanNonWorking(self):
 		for info in self.cursor.execute("SELECT * FROM "+self.TB_ProxyPool).fetchall():
 			IP, PORT, PROTOCOL = info[0], str(info[1]), info[2].lower()
@@ -52,6 +38,11 @@ class ProxyPool:
 					print " "*10+" --->>> ANONYMOUS <<<--- \n"
 					break
 	
+	#Outputs Total number of Proxies within ProxyPoolDB, Rate of Proxy HealthChecks, Num of Threads active, Rate of new Proxies added, Rate of Health Proxies
+	def getProxyPoolStatus(self):
+		records = self.cursor.execute("SELECT * FROM "+self.TB_ProxyPool).fetchall()
+		print "[!] Proxy Amount: "+str(len(records))
+
 	#Testing given Proxy's connection and anonymity, returns True if it can be used and is anonymous, otherwise returns False
 	def testConnection(self, IP, PORT, PROTOCOL):
 		proxies = { PROTOCOL: IP+":"+PORT }
@@ -76,3 +67,5 @@ class ProxyPool:
 			return True
 		except:
 			return False
+DB = ProxyPool()
+DB.getProxyPoolStatus()

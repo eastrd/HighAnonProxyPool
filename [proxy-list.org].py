@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup as bs
 This is the script for scraping http://proxy-list.org site
 '''
 
-Pool = lib.ProxyPool("ProxyPoolDB")
+Pool = lib.ProxyPool()
 
 BASE_URL = "https://proxy-list.org/english/index.php?p=" 
 
@@ -17,7 +17,7 @@ Re_Pattern_IP = re.compile("(.*):")
 Re_Pattern_PORT = re.compile(":(.*)")
 
 while True:
-	print "Fetching Proxy..."
+	print "[Fetching Proxy...]"
 	for startingURL_Param in range(1,11):
 		while True:
 			try:
@@ -33,13 +33,14 @@ while True:
 					ip_port = base64.b64decode(Raw_ProxyInfo.find("li",{"class":"proxy"}).text.replace("Proxy('","").replace("')",""))
 					IP = re.findall(Re_Pattern_IP, ip_port)[0]
 					PORT = re.findall(Re_Pattern_PORT, ip_port)[0]
-					TYPE = Raw_ProxyInfo.find("li",{"class":"https"}).text
-					if TYPE != "-":
-						Pool.addProxy(IP,PORT,TYPE)
+					PROTOCOL = Raw_ProxyInfo.find("li",{"class":"https"}).text
+					if PROTOCOL != "-":
+						#Pool.addProxy(IP,PORT,PROTOCOL)
+						print PROTOCOL+" "+IP+" "+str(PORT)
 				break
 			except Exception as e:
 				print "An error occurred: "+str(e)
-	print "Done Fetching... Sleep for 30 seconds..."
+	print "[ Done Fetching... Sleep for 30 seconds... ]"
 	time.sleep(30)
 	print ""
 
