@@ -3,9 +3,6 @@ import requests
 import re
 from bs4 import BeautifulSoup as bs
 
-#I have been playing this file around, which it currently won't insert records into the database
-#If you want it to function fully, feel free to modify it, as it shouldn't be difficult :p
-
 Pool = lib.ProxyPool()
 
 RE_Pattern_IPaddr = re.compile("[0-9\.].*")
