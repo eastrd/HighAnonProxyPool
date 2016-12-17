@@ -80,11 +80,9 @@ def incloak_com():
 			print("An error occurred with incloak_com: "+str(e))
 		sleep(IntervalDelay)
 
-
-
-threading.Thread(target=proxy_list_org, name='proxy-list.org').start()
-threading.Thread(target=incloak_com, name='incloak.com').start()
-
-while True:
-	print("Current Amount of Threads: "+str(threading.activeCount()))
-	sleep(100)
+def start():
+	threading.Thread(target=proxy_list_org, name='proxy-list.org').start()
+	threading.Thread(target=incloak_com, name='incloak.com').start()
+	while True:
+		print("Current Amount of Threads: "+str(threading.activeCount()))
+		sleep(100)

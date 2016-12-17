@@ -76,15 +76,10 @@ class Proxy:
 			ProxyCheckerThread(ProxyRecord_tuples).start()
 
 		
-
-
-while True:
-	#仅当所有子线程都运行完毕的时候再开始新一轮的验证
-	if threading.activeCount() == 1:
-		#print("Starting a new round of Proxy washing...")
-		Proxy().ProxyWash()
-	sleep(2)
-'''
-proxies = { "http": "80.1.116.80"+":"+str(80) }
-print(requests.get("http://icanhazip.com", timeout = 8, proxies = proxies).content)
-'''
+def start():
+	while True:
+		#仅当所有子线程都运行完毕的时候再开始新一轮的验证
+		if threading.activeCount() == 1:
+			#print("Starting a new round of Proxy washing...")
+			Proxy().ProxyWash()
+		sleep(2)
