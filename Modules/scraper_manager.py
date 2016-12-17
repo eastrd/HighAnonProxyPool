@@ -31,7 +31,7 @@ def proxy_list_org():
 	Re_Pattern_IP = re.compile("(.*):")
 	Re_Pattern_PORT = re.compile(":(.*)")
 	while True:
-		print("[!] Scraping proxy-list.org...")
+		#print("[!] Scraping proxy-list.org...")
 		for startingURL_Param in range(1,11):
 			while True:
 				try:
@@ -63,7 +63,7 @@ def incloak_com():
 	RE_Pattern_IPaddr = re.compile("[0-9\.].*")
 	while True:
 		try:
-			print("[!] Scraping incloak.com...")
+			#print("[!] Scraping incloak.com...")
 			soup = bs(requests.get("https://incloak.com/proxy-list/?anon=234#list").content,"html.parser")
 			for RAW_ProxyInfo in soup.find_all("tr"):
 				#Length is checked so not to include the skeleton frame <td>
@@ -84,5 +84,5 @@ def start():
 	threading.Thread(target=proxy_list_org, name='proxy-list.org').start()
 	threading.Thread(target=incloak_com, name='incloak.com').start()
 	while True:
-		print("Current Amount of Threads: "+str(threading.activeCount()))
+		#print("Current Amount of Threads: "+str(threading.activeCount()))
 		sleep(100)
