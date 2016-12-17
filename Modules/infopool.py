@@ -24,4 +24,3 @@ while True:
 	cmd("cls")
 	print("[!] 目前数据库中有%s个代理"%NumProxies)
 	print("[!] 当前代理验证线程数量为: %s" %(NumProxyCheckThreads))
-	sleep(1)
