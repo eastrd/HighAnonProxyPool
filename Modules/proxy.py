@@ -49,14 +49,13 @@ class Proxy:
 	def ProxyWash(self):
 		#调用数据库模块的接口，获取全部代理，并启动多线程验证其有效性
 		DirtyProxyList = db.Database().fetch_all()
-		print("Current Proxies Count: "+str(len(DirtyProxyList)))
 		for ProxyRecord_tuples in DirtyProxyList:
 			#如果同时存在多于100个线程，则等待10秒再开新线程
 			while threading.activeCount() > 100:
-				print("Overloading, waiting for 5 seconds")
+				#print("Overloading, waiting for 5 seconds")
 				sleep(5)
 			ProxyCheckerThread(ProxyRecord_tuples).start()
-
+		print("[!] 当前代理循环验证完毕")
 
 #初始线程数量 = 本线程 + 爬虫管理模块 + 命令界面模块 + 爬虫数  =  3 + 爬虫数
 InitialThreadNum = 5
@@ -66,8 +65,8 @@ def start():
 		#仅当所有子线程都运行完毕的时候再开始新一轮的验证
 
 		if threading.activeCount() == InitialThreadNum:
-			print("[!] 启动代理验证程序...")
+			print("[!] 成功启动代理验证程序...")
 			Proxy().ProxyWash()
 		else:
-			print("[!] 代理验证程序启动失败，线程数量为%s"%threading.activeCount())
+			print("[!] 代理验证程序启动失败，等待线程数量为%s"%(threading.activeCount()-5))
 		sleep(2)
