@@ -17,8 +17,13 @@ class Database:
 			pass
 	
 	def add(self, ip, port, protocol):
-		self.cursor.execute("INSERT INTO TB_ProxyPool(ip, port, protocol) SELECT ?,?,? WHERE NOT EXISTS (SELECT * FROM TB_ProxyPool WHERE TB_ProxyPool.ip=? AND TB_ProxyPool.port=? AND TB_ProxyPool.protocol=?)", [ip,port,protocol,ip,port,protocol])
-	
+		try:
+			self.cursor.execute("INSERT INTO TB_ProxyPool(ip, port, protocol) SELECT ?,?,? WHERE NOT EXISTS (SELECT * FROM TB_ProxyPool WHERE TB_ProxyPool.ip=? AND TB_ProxyPool.port=? AND TB_ProxyPool.protocol=?)", [ip,port,protocol,ip,port,protocol])
+		except sqlite3.OperationalError as e:
+			#数据库繁忙，同时写入会发生错误
+			#print("Error: Database Busy")
+			pass
+
 	def modify():
 		#后期更新再开发此功能
 		pass
@@ -34,8 +39,13 @@ class Database:
 
 	#Sub-functions
 	def fetch_all(self):
-		#Returns a list of tuple objects, each stands for a proxy record
-		return self.cursor.execute("SELECT * FROM TB_ProxyPool").fetchall()
+		try:
+			#Returns a list of tuple objects, each stands for a proxy record
+			return self.cursor.execute("SELECT * FROM TB_ProxyPool").fetchall()
+		except sqlite3.OperationalError as e:
+			#数据库繁忙，同时写入会发生错误
+			#print("Error: Database Busy")
+			pass
 
 
 '''
