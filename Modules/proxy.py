@@ -52,8 +52,7 @@ class Proxy:
 		for ProxyRecord_tuples in DirtyProxyList:
 			#如果同时存在多于100个线程，则等待10秒再开新线程
 			while threading.activeCount() > 100:
-				#print("Overloading, waiting for 5 seconds")
-				sleep(5)
+				pass
 			ProxyCheckerThread(ProxyRecord_tuples).start()
 		#print("[!] 当前代理循环验证任务线程发布完毕\n\n")
 

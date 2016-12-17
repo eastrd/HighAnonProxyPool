@@ -22,7 +22,7 @@ class ScraperManagerThread(threading.Thread):
 		B()
 
 '''
-IntervalDelay = 10
+IntervalDelay = 20
 
 def proxy_list_org():
 	#http://proxy-list.org
@@ -53,7 +53,6 @@ def proxy_list_org():
 					break
 				except Exception as e:
 					print("An error occurred with proxy_list_org: "+str(e))
-		#print("[ Done Fetching... Sleep for 5 seconds... ]")
 		sleep(IntervalDelay)
 
 
