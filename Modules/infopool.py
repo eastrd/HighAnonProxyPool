@@ -1,5 +1,5 @@
 #-*- coding:UTF-8 -*-
-#信息池界面模块
+#信息池模块
 #Author: 苍冥 e0t3rx
 
 import scraper_manager
