@@ -16,7 +16,7 @@ print("[!] 启动验证模块...")
 threading.Thread(target=proxy.start, name='Proxy Manager').start()
 sleep(2)
 
-#实时获取各模块信息
+#实时获取各模块信息并提供命令行交互
 while True:
 	TotalProxies = db.Database().fetch_all()
 	NumProxies = len(TotalProxies) if TotalProxies is not None else "Read Error Database Locked"
