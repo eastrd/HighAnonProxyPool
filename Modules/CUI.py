@@ -16,5 +16,7 @@ threading.Thread(target=proxy.start, name='Proxy Manager').start()
 
 #CUI界面循环
 while True:
-	print("目前数据库中有%s个代理"%len(db.Database().fetch_all()))
+	NumProxies = db.Database().fetch_all()
+	print("[!] 目前数据库中有%s个代理"%len(NumProxies)) if NumProxies is not None else ""
+	print("[!] 当前代理验证线程数量为: %s" %(threading.activeCount()-5))
 	sleep(1)
