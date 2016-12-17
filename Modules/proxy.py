@@ -55,7 +55,7 @@ class Proxy:
 				#print("Overloading, waiting for 5 seconds")
 				sleep(5)
 			ProxyCheckerThread(ProxyRecord_tuples).start()
-		print("[!] 当前代理循环验证完毕")
+		#print("[!] 当前代理循环验证任务线程发布完毕\n\n")
 
 #初始线程数量 = 本线程 + 爬虫管理模块 + 命令界面模块 + 爬虫数  =  3 + 爬虫数
 InitialThreadNum = 5
@@ -64,9 +64,9 @@ def start():
 	while True:
 		#仅当所有子线程都运行完毕的时候再开始新一轮的验证
 
-		if threading.activeCount() == InitialThreadNum:
-			print("[!] 成功启动代理验证程序...")
+		if threading.activeCount() <= InitialThreadNum:
+			print("\n\n[!] 开始新一轮代理验证...")
 			Proxy().ProxyWash()
-		else:
-			print("[!] 代理验证程序启动失败，等待线程数量为%s"%(threading.activeCount()-5))
+		#else:
+			#print("[!] 代理验证程序启动失败，等待线程数量为%s"%(threading.activeCount()-5))
 		sleep(2)
