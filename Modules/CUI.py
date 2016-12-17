@@ -10,7 +10,7 @@ import threading
 
 #启动爬虫与代理验证模块
 print("[!] 启动爬虫模块...")
-threading.Thread(target=scraper_manager.start, name='Scraper Manager').start()
+#threading.Thread(target=scraper_manager.start, name='Scraper Manager').start()
 print("[!] 启动验证模块...")
 threading.Thread(target=proxy.start, name='Proxy Manager').start()
 
