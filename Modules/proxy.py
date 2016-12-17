@@ -30,35 +30,17 @@ class Proxy:
 		#暂时先从icanhazip获取IP，后期会进行更改
 		try:
 			MaskedIP = str(requests.get("http://icanhazip.com", timeout=self.REQ_TIMEOUT, proxies=proxies).content, "utf-8").replace("\n","")
-		except requests.exceptions.ProxyError:
-			#一般情况下是代理挂掉了，直接删除
-			db.Database().delete(ip,port,protocol)
-			return
-		except UnicodeDecodeError:
-			#一般解码错误的原因是中文字符，例如：“错误：您所请求的网址（URL）无法获取”，因代理对访问的url存在限制，故此处直接删除
-			response = str(requests.get("http://icanhazip.com", timeout=self.REQ_TIMEOUT, proxies=proxies).content, "GBK").replace("\n","")
-			#print(ip+": "+response)
-			db.Database().delete(ip,port,protocol)
-			return
-		except ConnectionResetError:
-			#连接被重置，一般是服务器那边拒绝连接，直接删除
-			db.Database().delete(ip,port,protocol)
-			return
 		except Exception as e:
-			if "timeout" in str(e).lower():
-				#代理超时了，删掉换下一个
-				db.Database().delete(ip,port,protocol)
-				return
-			else:
-				#一切意外尽在此处捕捉
-				print("[!] Unexpected Error: "+str(e))
-				return
+			#代理超时了、解码错误（例如：“错误：您所请求的网址（URL）无法获取” - 代理对访问的url存在限制）、代理挂掉了、连接被重置，全部删除
+			db.Database().delete(ip,port,protocol)
+			return
 
 		if MaskedIP != ip:
 			#如果返回的IP和代理ip不一样，则调用数据库接口删除此条代理记录
 			db.Database().delete(ip,port,protocol)
 		else:
-			print("[!] "+ip+":"+str(port)+" is Good!")
+			#print("[!] "+ip+":"+str(port)+" is Good!")
+			pass
 
 	def fetch_info(self):
 		#后期更新再开发此功能
@@ -75,11 +57,17 @@ class Proxy:
 				sleep(5)
 			ProxyCheckerThread(ProxyRecord_tuples).start()
 
-		
+
+#初始线程数量 = 本线程 + 爬虫管理模块 + 命令界面模块 + 爬虫数  =  3 + 爬虫数
+InitialThreadNum = 5
+
 def start():
 	while True:
 		#仅当所有子线程都运行完毕的时候再开始新一轮的验证
-		if threading.activeCount() == 1:
-			#print("Starting a new round of Proxy washing...")
+
+		if threading.activeCount() == InitialThreadNum:
+			print("[!] 启动代理验证程序...")
 			Proxy().ProxyWash()
+		else:
+			print("[!] 代理验证程序启动失败，线程数量为%s"%threading.activeCount())
 		sleep(2)
