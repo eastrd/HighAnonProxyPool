@@ -3,7 +3,6 @@
 #Author: 苍冥 e0t3rx
 
 import requests
-from time import sleep
 import db
 from time import sleep
 import threading
