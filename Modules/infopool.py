@@ -10,20 +10,26 @@ import threading
 from os import system as cmd
 import msvcrt
 
+#字符串常量
 LOGO = 6*"_"+"                   "+6*"_"+"           _ \n| ___ \                  | ___ \         | |\n| |_/ _ __ _____  ___   _| |_/ ___   ___ | |\n\
 |  __| '__/ _ \ \/ | | | |  __/ _ \ / _ \| |\n| |  | | | (_) >  <| |_| | | | (_) | (_) | |\n\_|  |_|  \___/_/\_\\__,  \_|  \___/ \___/|_|\n\
                      __/ |                  \n                    |___/                   \n               _____ _   _____              \n\
               |  _  | | |____ |             \n "+6*"_"+"    ___| |/' | |_    / /_ ____  __   \n|"+6*"_"+"|  / _ |  /| | __|   \ | '__\ \/ /   \n\
          |  __\ |_/ | |_.___/ | |   >  <    \n          \___|\___/ \__\____/|_|  /_/\_\ \n"
 
-MENU = "\n功能菜单："+"\n\t"+"[W] 启动本地WEB服务器"+"\n\t"+"[T]修改验证线程数量"+"\n\t"+"[I]查看使用说明"+"\n\t"+"[M]功能菜单"
+MENU = "\n功能菜单："+"\n\t"+"[W]启动本地WEB服务器"+"\n\t"+"[T]修改验证线程数量"+"\n\t"+"[I]查看使用说明"+"\n\t"+"[M]功能菜单"
+INSTRUCTION = "高匿代理池说明："
+
+#选项变量
+OnOffSwitcher = ["ON", "OFF"]
 modeChoice = "MENU"
 modeMapping = {"M":"MENU","T":"THREAD","I":"INSTRUCTION","W":"WEB"}
-INSTRUCTION = "高匿代理池说明："
+modeWebServer = "OFF"
+
 
 def Input():
 	#如果忘记加Global关键字，就不会修改modeChoice的值
-	global modeChoice
+	global modeChoice, modeWebServer
 	while True:
 		#忽略特殊按键引起的异常
 		try:
@@ -31,6 +37,11 @@ def Input():
 			getch = str(msvcrt.getch(),"utf-8")
 			if getch.upper() in modeMapping:
 				modeChoice = modeMapping[getch.upper()]
+			if modeChoice == "WEB" and getch.upper() == "S":
+				if modeWebServer == "ON":
+					modeWebServer = "OFF"
+				else:
+					modeWebServer = "ON"
 		except:
 			pass
 
@@ -56,7 +67,8 @@ def Output():
 			print(MENU)
 		elif modeChoice == "WEB":
 			showInfo()
-			print("[!] Web功能目前还在开发中，敬请期待："+"\n\t"+"http://github.com/eastrd/HighAnonProxyPool")
+			print("[S]Web服务器状态："+modeWebServer)
+			print("\n[!] Web功能目前还在开发中，敬请期待："+"\n\t"+"http://github.com/eastrd/HighAnonProxyPool")
 			print(MENU)
 		elif modeChoice == "THREAD":
 			showInfo()
