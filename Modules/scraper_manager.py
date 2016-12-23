@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup as bs
 import db
 from time import sleep
 import threading
+
 '''
 #ScraperManagerThread用来启动所有爬虫线程，以便同时爬取所有代理
 class ScraperManagerThread(threading.Thread):
@@ -22,6 +23,7 @@ class ScraperManagerThread(threading.Thread):
 		B()
 
 '''
+
 IntervalDelay = 20
 
 def proxy_list_org():
